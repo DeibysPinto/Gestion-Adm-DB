@@ -1,0 +1,88 @@
+CREATE DATABASE funciones;
+USE funciones;
+
+
+DELIMITER //
+
+CREATE FUNCTION convertir_a_mayusculas (texto VARCHAR(255))
+RETURNS VARCHAR(255) DETERMINISTIC
+BEGIN
+   DECLARE texto_mayusculas VARCHAR(255);
+   SET texto_mayusculas = UPPER(texto);
+   RETURN texto_mayusculas;
+   
+END //
+   
+DELIMITER ;
+
+SELECT convertir_a_mayusculas("hola hamer gay")
+AS texto_convertido;
+
+DELIMITER //
+
+CREATE FUNCTION calcular_suma_ventas()
+RETURNS DECIMAL(10,2) 
+BEGIN
+   DECLARE total DECIMAL(10,2);
+   SELECT SUM(monto) INTO total FROM ventas;
+   RETURN total;
+   
+END //
+   
+DELIMITER ;
+
+CREATE TABLE ventas ( monto NUMERIC);
+INSERT INTO ventas (monto) VALUES (1000),(2000);
+
+SELECT calcular_suma_ventas()
+AS total_ventas;
+
+DELIMITER //
+
+CREATE FUNCTION determinar_signo(numero INT)
+ RETURNS VARCHAR(20) DETERMINISTIC
+ BEGIN
+   DECLARE signo VARCHAR(20);
+    IF numero>0 THEN
+     SET signo = "positivo";
+   ELSE
+    IF numero<0 THEN
+      SET signo = "Negativo";
+	ELSE
+      SET signo="cero";
+      END IF;
+   END IF;
+   RETURN signo;
+END //
+
+DELIMITER ;
+
+SELECT determinar_signo(-1)
+AS signo;
+
+DELIMITER //
+
+CREATE FUNCTION diferencia_en_dias(fecha_incio DATE, fecha_fin DATE)
+RETURNS INT DETERMINISTIC
+BEGIN
+ DECLARE DIFF INT;
+ SET DIFF=DATEDIFF(fecha_fin,fecha_incio);
+ RETURN DIFF;
+END //
+
+DELIMITER ;
+
+SELECT diferencia_en_dias("2024-04-07","2024-04-15")AS diferencia;
+
+DELIMITER //
+CREATE FUNCTION concatenar_nombre_apellido(nombre VARCHAR(50), apellido VARCHAR(50))
+RETURNS VARCHAR(100)
+BEGIN
+ DECLARE nombre_completo VARCHAR(100);
+ SET nombre_completo=CONCAT(nombre," ",apellido);
+ RETURN nombre_completo;
+END //
+DELIMITER ;
+
+SELECT CONCATENAR_NOMBRE_APELLIDO("Juan","Perez") 
+AS nombre_completo;
