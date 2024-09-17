@@ -84,5 +84,5 @@ BEGIN
 END //
 DELIMITER ;
 
-SELECT CONCATENAR_NOMBRE_APELLIDO("Juan","Perez") 
+SELECT concatenar_nombre_apellido("Juan","Perez") 
 AS nombre_completo;
