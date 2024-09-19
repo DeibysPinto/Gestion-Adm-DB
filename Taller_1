@@ -1,0 +1,173 @@
+CREATE DATABASE practica;
+USE practica;
+
+ /* --------------------------------- Area del circulo -------------------------------*/
+DELIMITER //
+CREATE FUNCTION area_circulo(radio FLOAT)
+ RETURNS FLOAT
+ BEGIN
+ DECLARE area FLOAT;
+ SET area = 3.1416 * radio * radio;
+ RETURN area;
+END //
+DELIMITER ;
+
+SELECT area_circulo(5) 
+AS area;
+
+ /* --------------------------------- Area del triangulo -------------------------------*/
+DELIMITER //
+CREATE FUNCTION area_triangulo(base FLOAT, altura FLOAT)
+ RETURNS FLOAT
+ BEGIN
+ DECLARE area FLOAT;
+ SET area = 0.5 * base * altura;
+ RETURN area;
+END //
+DELIMITER ;
+
+SELECT area_triangulo(6,5) 
+AS area;
+
+
+ /* --------------------------------- Grados Fahrenheit -------------------------------*/
+DELIMITER //
+CREATE FUNCTION grados_fahrenheit(celsius FLOAT)
+ RETURNS FLOAT
+ BEGIN
+ DECLARE grados FLOAT;
+ SET grados = celsius*9/5+32;
+ RETURN grados;
+END //
+DELIMITER ;
+
+SELECT grados_fahrenheit(20)
+AS grados_Fahrenheit;
+
+/* --------------------------------- conevertir peso -------------------------------*/
+DELIMITER //
+CREATE FUNCTION convertir_peso(dolar FLOAT)
+ RETURNS FLOAT
+ BEGIN
+ DECLARE dineros FLOAT;
+ SET dineros = dolar*4175.75;
+ RETURN dineros;
+END //
+DELIMITER ;
+
+SELECT convertir_peso(0.5)
+AS pesos;
+
+/* --------------------------------- agregar porcentaje -------------------------------*/
+DELIMITER //
+CREATE FUNCTION suma_porcentaje(precio FLOAT)
+ RETURNS FLOAT
+ BEGIN
+ DECLARE porcentaje FLOAT;
+ SET porcentaje = precio*1.15;
+ RETURN porcentaje;
+END //
+DELIMITER ;
+
+SELECT suma_porcentaje(2200)
+AS precio_incrementado;
+
+/* --------------------------------- cambiar MAYUSCULAS a minusculas -------------------------------*/
+DELIMITER //
+CREATE FUNCTION cambiar_a_minusculas(texto VARCHAR(100))
+ RETURNS VARCHAR (100)
+ BEGIN
+ DECLARE texto_minusculas VARCHAR(100);
+ SET texto_minusculas = LOWER(texto);
+ RETURN texto_minusculas;
+END //
+DELIMITER ;
+
+SELECT cambiar_a_minusculas("COMO LE PEGASTE A ESA PELOTA")
+AS texto_convertido;
+
+/* --------------------------------- crear tabla temporal -------------------------------*/
+
+CREATE TABLE TblStock (codigo INT, 
+descripcion VARCHAR(255),
+cantidad INT,
+ValorUnitario FLOAT);
+
+INSERT INTO TblStock (codigo,descripcion,Cantidad,ValorUnitario)
+VALUES 
+(1,"Arroz",5,2500),
+(2,"Aceite",5,6000),
+(3,"Lentejas",7,3800),
+(4,"Pan",12,3000),
+(5,"Pescado",8,8700);
+
+/* --------------------------------- Funcion costo inventario -------------------------------*/
+
+DELIMITER //
+CREATE FUNCTION costo_inventario()
+ RETURNS FLOAT 
+ BEGIN
+ DECLARE suma FLOAT;
+ SELECT SUM(Cantidad * ValorUnitario) INTO suma FROM TblStock;
+ RETURN suma;
+END //
+DELIMITER ;
+
+SELECT costo_inventario()
+AS costo_total;
+
+/* --------------------------------- funcion costo promedio inventario -------------------------------*/
+
+DELIMITER //
+CREATE FUNCTION inventario_promedio()
+ RETURNS FLOAT 
+ BEGIN
+ DECLARE suma FLOAT;
+ DECLARE cantidad_total FLOAT;
+ DECLARE promedio FLOAT;
+ SELECT SUM(Cantidad * ValorUnitario) INTO suma FROM TblStock;
+ SELECT SUM(Cantidad) INTO cantidad_total FROM TblStock;
+ SET promedio = suma/cantidad_total;
+ RETURN promedio;
+END //
+DELIMITER ;
+
+SELECT inventario_promedio()
+AS costo_promedio;
+
+/* --------------------------------- Funcion concatenar 10 palabras -------------------------------*/
+
+DELIMITER //
+CREATE FUNCTION concatenar_10_palabras(P1 VARCHAR(50), P2 VARCHAR(50),
+P3 VARCHAR(50), P4 VARCHAR(50),P5 VARCHAR(50), P6 VARCHAR(50),P7 VARCHAR(50),
+P8 VARCHAR(50), P9 VARCHAR(50), P10 VARCHAR(50))
+RETURNS VARCHAR(50)
+BEGIN
+ DECLARE palabras_concatenadas VARCHAR(500);
+  SET palabras_concatenadas = CONCAT(P1," ",P2," ",P3," ",P4," ",P5," ",P6," ",P7," ",P8," ",P9," ",P10);
+ RETURN palabras_concatenadas;
+END //
+DELIMITER ;
+
+SELECT concatenar_10_palabras("Caballo", "de", "la",  "sabana", 
+"porque", "está", "viejo", "y", "cansao'","pero")
+AS concatenado;
+
+/* --------------------------------- Funcion incrementar salario -------------------------------*/
+
+DELIMITER //
+CREATE FUNCTION incremento_salario(salario FLOAT , años INT)
+ RETURNS FLOAT 
+ BEGIN
+ DECLARE valor FLOAT;
+ IF años >= 5 THEN
+        SET valor = salario * 1.10;  
+    ELSEIF años < 5 THEN
+        SET valor = salario * 1.05;    
+    END IF;
+ RETURN valor;
+END //
+DELIMITER ;
+
+SELECT incremento_salario(1000000,5)
+AS nuevo_salario;
